@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="d-flex">
+        <div class="ml-auto p-2">
+            <form method="get" action="{% url 'base' %}">
+                <button type="submit" class="btn btn-success" value="Base page">Back
+                </button>
+            </form>
+        </div>
+    </div>
+    <div style="color: #e4b101; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%)">
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-warning" value="Update"> Update</button>
+        </form>
+
+    </div>
+{% endblock %}
