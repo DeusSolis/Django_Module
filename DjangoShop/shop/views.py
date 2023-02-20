@@ -1,24 +1,12 @@
 from datetime import timedelta
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
-from .forms import UserForm, ProductForm, PurchaseForm, PurchaseReturnForm
-from .models import MyUser, Product, Purchase, PurchaseReturns
-
-class UserCreateView(CreateView):
-    model = MyUser
-    form_class = UserForm
-    success_url = '/login/'
-    template_name = 'registration.html'
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.set_password(self.object.password)
-        self.object.save()
-        return super().form_valid(form)
+from .forms import ProductForm, PurchaseForm, PurchaseReturnForm
+from .models import Product, Purchase, PurchaseReturns
+from user.models import MyUser
 
 
 class ProductCreateView(PermissionRequiredMixin, CreateView):
@@ -130,12 +118,3 @@ class ReturnDeleteView(DeleteView):
     model = PurchaseReturns
     template_name = 'delete_return.html'
     success_url = '/'
-
-
-class Login(LoginView):
-    template_name = 'login.html'
-    success_url = '/'
-
-
-class Logout(LogoutView):
-    next_page = '/'

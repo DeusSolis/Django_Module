@@ -1,12 +1,9 @@
 from django.urls import path
-from .views import UserCreateView, ProductCreateView, Login, Logout, ProductPageView, PurchaseCreateView, \
+from .views import ProductCreateView, ProductPageView, PurchaseCreateView, \
     PurchaseReturnCreateView, UpdateProductView, PurchasePageView, ReturnPageView, PurchaseDeleteView, ReturnDeleteView
 
 urlpatterns = [
     path('', ProductPageView.as_view(), name='base'),
-    path('registration/', UserCreateView.as_view(), name='registration'),
-    path('login/', Login.as_view(), name='login'),
-    path('logout/', Logout.as_view(), name='logout'),
     path('create_product/', ProductCreateView.as_view(), name='product_create'),
     path('create_purchase/', PurchaseCreateView.as_view(), name='create_purchase'),
     path('purchase/', PurchasePageView.as_view(), name='purchase'),

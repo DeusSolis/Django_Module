@@ -1,12 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 
-
-class MyUser(AbstractUser):
-    wallet = models.IntegerField(default=10000)
-
-    def __str__(self):
-        return self.username
+from user.models import MyUser
 
 
 class Product(models.Model):
