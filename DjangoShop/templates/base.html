@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Django Shop</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet">
+</head>
+  <body style="background-color: #3A547F ">
+<div>
+    {% block content %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if request.user.is_authenticated and request.user.is_superuser == False %}
+            <div class="alert alert-warning" role="alert">
+                <div class="d-flex">
+                    <div class="p-2">User, {{ request.user }}!</div>
+                    <div class="ml-auto p-2">
+                        <form method="get" action="{% url 'logout' %}">
+                            <button type="submit" class="btn btn-outline-danger" value="Logout">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex" >
+                <div class="p-2">
+                    <h3 style="color: white">You have: {{ request.user.wallet }} UAH </h3>
+                </div>
+                <div class="ml-auto p-2">
+                    <form method="get" action="{% url 'purchase' %}">
+                        <button type="submit" class="btn btn-warning" value="My purchase">Shopping</button>
+                    </form>
+                </div>
+            </div>
+            </div>
+            <hr style="background-color: #e4b101">
+
+
+
+            {% for product in object_list %}
+                <form method="post" action="{% url 'create_purchase' %}">
+                    <div style="color: white">
+                        <div class="d-flex">
+                            <div class="p-2">
+                                <img src="/media/{{ product.image }}" width="150" height="150" alt="{{ product.name }}">
+                            </div>
+                            <div class="p-2">
+                                <h2 style="color: #e4b101">{{ product.name }}</h2>
+                                <p>Description: {{ product.description }}</p>
+                                <p>Price: {{ product.price }}</p>
+                                <p>Quantity in stock: {{ product.quantity_in_stock }}</p>
+                                <p>{{ purchase_form }}</p>
+                            </div>
+                            <div class="ml-auto p-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <button type="submit" class="btn btn-success" value="buy"> Buy</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <hr style="background-color: #0bdee6">
+            {% endfor %}
+        {% endif %}
+
+        {% if request.user.is_superuser %}
+            <div class="alert alert-warning" role="alert">
+                <div class="d-flex">
+                    <div class="p-2">Hello, {{ request.user }}!</div>
+                    <div class="ml-auto p-2">
+                        <form method="get" action="{% url 'logout' %}">
+                            <button type="submit" class="btn btn-outline-danger" value="Logout">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-secondary" role="alert">
+                <div class="d-flex">
+                    <div class="p-2">
+                        <form method="get" action="{% url 'product_create' %}">
+                            <button type="submit" class="btn btn-success" value="Add"> Add product</button>
+                        </form>
+                    </div>
+                    <div class="ml-auto p-2">
+                        <form method="get" action="{% url 'returns' %}">
+                            <button type="submit" class="btn btn-warning" value="Return view"> View returns</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            {% for product in object_list %}
+                <div style="color: whitesmoke">
+                    <div class="d-flex">
+                        <div class="p-2">
+                            <img src="/media/{{ product.image }}" width="150" height="150" alt="{{ product.name }}">
+                        </div>
+                        <div class="p-2">
+                            <h2 style="color: #e4b101">{{ product.name }}</h2>
+                            <p>Description : {{ product.description }}</p>
+                            <p>Price : {{ product.price }}</p>
+                            <p>Quantity in stock: {{ product.quantity_in_stock }}</p>
+                            <p>{{ purchase_form }}</p>
+                        </div>
+                        <div class="ml-auto p-2">
+                            <form method="get" action="{% url 'update_product' product.pk %}">
+                                <button type="submit" class="btn btn-warning" value="Update">Change</button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr style="background-color: #e4b101">
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if request.user.is_anonymous %}
+            <div class="alert alert-success" role="alert">
+                <div class="d-flex">
+                    <div class="p-2">
+                        <h5 class="text-center"> Already have an account? </h5>
+                    </div>
+                    <div class="ml-auto p-2">
+                        <form method="get" action="{% url 'login' %}">
+                            <button type="submit" class="btn btn-success" value="Login"> Login </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-warning" role="alert">
+                <div class="d-flex">
+                    <div class="p-2">
+                        <h5 class="text-center">Not registered yet?</h5>
+                    </div>
+                    <div class="ml-auto p-2">
+                        <form method="get" action="{% url 'registration' %}">
+                            <button type="submit" class="btn btn-warning" value="Registration"> Registration</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% for product in object_list %}
+                <div style="color: white">
+                    <div class="d-flex">
+                        <div class="p-2">
+                            <img src="/media/{{ product.image }}" width="150" height="150" alt="{{ product.name }}">
+                        </div>
+                        <div class="p-2">
+                            <h2 style="color: #e4b101">{{ product.name }}</h2>
+                            <p>Description: {{ product.description }}</p>
+                            <p>Price: {{ product.price }}</p>
+                        </div>
+                    </div>
+                    <hr style="background-color: #e4b101">
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endblock %}
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div style="display: flex; justify-content: center;align-items: center;height: 100vh">
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+              {{ field.label_tag }}
+              {{ field }}
+
+            {% endfor %}
+            <div style="display: flex; justify-content: center;align-items: center;">
+                <button type="submit" class="btn btn-success" value="Registration"> Registration</button>
+            </div>
+        </form>
+
+    </div>
+{% endblock %}
